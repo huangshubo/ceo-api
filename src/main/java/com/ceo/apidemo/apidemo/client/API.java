@@ -66,7 +66,7 @@ public class API {
      * @throws Exception
      */
     public void ticker() throws Exception {
-        String connUrl = PUB_MARKET_kline + "?market=ceo_qc";
+        String connUrl = PUB_MARKET_ticker + "?market=ceo_qc";
         URL url = new URL(connUrl);
         URLConnection urlConnection = url.openConnection();
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
