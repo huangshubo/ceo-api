@@ -12,11 +12,10 @@ import java.util.Map;
 
 public class API {
 
-    public static final String ACCESS_KEY = "764d75f2-3d26-49e3-863b-b656f2080eba";
-    public static final String SECRET_KEY = "376cd574-b56a-41d7-811e-657583fc6185";
+    public static final String ACCESS_KEY = "";
+    public static final String SECRET_KEY = "";
 
-//    public static final String HOST = "https://api.ceobi.com";
-    public static final String HOST = "http://localhost:7099";
+    public static final String HOST = "https://api.ceobi.com";
     //获取全币种行情
     public static final String PUB_MARKET_allTicker = HOST + "/api/market/allTicker";
     //行情
@@ -81,7 +80,7 @@ public class API {
      * @throws Exception
      */
     public void entrust() throws Exception {
-        String connUrl = PUB_MARKET_ticker + "?market=ceo_qc";
+        String connUrl = PUB_MARKET_entrust + "?market=ceo_qc";
         URL url = new URL(connUrl);
         URLConnection urlConnection = url.openConnection();
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
