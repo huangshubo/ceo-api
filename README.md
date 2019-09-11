@@ -111,6 +111,9 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
               },
               ......
 }
+*示例*
+[java](#获取全币种行情-allTicker)
+
 ```
 ----
 ### **行情**
@@ -903,24 +906,55 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 
 * 公共
 
-```python
-import requests
+```java
+    public static final String ACCESS_KEY = "";
+    public static final String SECRET_KEY = "";
 
-ROOT_URL = 'https://www.mxc.com'
+    public static final String HOST = "https://api.ceobi.com";
+    //获取全币种行情
+    public static final String PUB_MARKET_allTicker = HOST + "/api/market/allTicker";
+    //行情
+    public static final String PUB_MARKET_ticker = HOST + "/api/market/ticker";
+    //委托记录
+    public static final String PUB_MARKET_entrust = HOST + "/api/market/entrust";
+    //历史成交
+    public static final String PUB_MARKET_trades = HOST + "/api/market/trades";
+    //K线
+    public static final String PUB_MARKET_kline = HOST + "/api/market/kline";
 
-headers = {
-    'Content-Type': 'application/json',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
-    "Accept": "application/json",
-}
+    //获取用户信息
+    public static final String PRI_DEAL_accountInfo = HOST + "/api/deal/accountInfo";
+    //委托下单
+    public static final String PRI_DEAL_order = HOST + "/api/deal/order";
+    //取消委托
+    public static final String PRI_DEAL_cancelOrder = HOST + "/api/deal/cancelOrder";
+    //获取委托买单或卖单
+    public static final String PRI_DEAL_getOrder = HOST + "/api/deal/getOrder";
+    //获取多个委托买单或卖单
+    public static final String PRI_DEAL_getOrders = HOST + "/api/deal/getOrders";
+    //获取交易记录
+    public static final String PRI_DEAL_getTrades = HOST + "/api/deal/getTrades";
+    //获取用户充值地址
+    public static final String PRI_DEAL_getUserAddress = HOST + "/api/deal/getUserAddress";
+    //获取用户的数字币提现地址
+    public static final String PRI_DEAL_getWithdrawAddress = HOST + "/api/deal/getWithdrawAddress";
+    //获取数字币提现记录
+    public static final String PRI_DEAL_getWithdrawRecord = HOST + "/api/deal/getWithdrawRecord";
+    //获取数字币充值记录
+    public static final String PRI_DEAL_getChargeRecord = HOST + "/api/deal/getChargeRecord";
 ```
 
-> ###### 获取市场列表信息 python demo
+> ###### 获取全币种行情-allTicker
 
-```python
-url = ROOT_URL + '/open/api/v1/data/markets'
-response = requests.request('GET', url, headers=headers)
-print(response.json())
+```java
+    public void allTicker() throws Exception {
+        URL url = new URL(PUB_MARKET_allTicker);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
 
 > ###### 获取交易对信息 python demo
