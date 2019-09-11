@@ -10,6 +10,8 @@
  > demo1 java客户端
  >
  > demo2 html代码 html可直接运行
+
+ **结构说明**
 ```
  trade-api-demo
  ├─com.ceo.apidemo.apidemo.client      rest接口demo
@@ -21,7 +23,7 @@
  │    ├─demo1  java客户端
  │    │
  │    └─demo2  html客户端 html可直接运行
- │    
+ │
 ```
 
 
