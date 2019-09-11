@@ -113,7 +113,9 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 }
 ```
 *示例*
+
 [java](#获取全币种行情-allTicker)
+
 ----
 ### **行情**
 *Request*
@@ -146,6 +148,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           }
 }
 ```
+*示例*
+
+[java](#行情-ticker)
+
 ----
 ### **委托记录**
 *Request*
@@ -190,6 +196,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           ]
 }
 ```
+*示例*
+
+[java](#委托记录-entrust)
+
 ----
 ### **历史成交**
 *Request*
@@ -228,6 +238,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           ]
 }
 ```
+*示例*
+
+[java](#历史成交-trades)
+
 ----
 ### **K线**
 *Request*
@@ -269,6 +283,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           }
 }
 ```
+*示例*
+
+[java](#K线-kline)
+
 ----
 ### **获取用户信息**
 *Request*
@@ -317,6 +335,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           }
 }
 ```
+*示例*
+
+[java](#获取用户信息-accountInfo)
+
 ----
 ### **委托下单**
 *Request*
@@ -351,6 +373,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
               }
 }
 ```
+*示例*
+
+[java](#委托下单-order)
+
 ----
 ### **取消委托**
 *Request*
@@ -381,6 +407,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           "data": ""
 }
 ```
+*示例*
+
+[java](#取消委托-cancelOrder)
+
 ----
 ### **获取委托买单或卖单**
 *Request*
@@ -422,6 +452,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           }
 }
 ```
+*示例*
+
+[java](#获取委托买单或卖单-getOrder)
+
 ----
 ### **获取多个委托买单或卖单**
 *Request*
@@ -468,6 +502,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           ]
 }
 ```
+*示例*
+
+[java](#获取多个委托买单或卖单-getOrders)
+
 ----
 ### **获取交易记录**
 *Request*
@@ -513,6 +551,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           ]
 }
 ```
+*示例*
+
+[java](#获取交易记录-getTrades)
+
 ----
 ### **获取用户充值地址**
 *Request*
@@ -546,6 +588,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           }
 }
 ```
+*示例*
+
+[java](#获取用户充值地址-getUserAddress)
+
 ----
 ### **获取用户的数字币提现地址**
 *Request*
@@ -579,6 +625,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           ]
 }
 ```
+*示例*
+
+[java](#获取用户的数字币提现地址-getWithdrawAddress)
+
 ----
 ### **获取数字币提现记录**
 *Request*
@@ -628,6 +678,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           }
 }
 ```
+*示例*
+
+[java](#获取数字币提现记录-getWithdrawRecord)
+
 ----
 ### **获取数字币充值记录**
 *Request*
@@ -689,6 +743,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
           }
 }
 ```
+*示例*
+
+[java](#获取数字币充值记录-getChargeRecord)
+
 ----
 ### **Response状态**
 > 1000; //成功
@@ -903,8 +961,6 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 
  #### 接口示例
 
-* 公共
-
 ```java
     public static final String ACCESS_KEY = "";
     public static final String SECRET_KEY = "";
@@ -942,12 +998,34 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
     //获取数字币充值记录
     public static final String PRI_DEAL_getChargeRecord = HOST + "/api/deal/getChargeRecord";
 ```
-
 > ###### 获取全币种行情-allTicker
-
 ```java
-    public void allTicker() throws Exception {
-        URL url = new URL(PUB_MARKET_allTicker);
+  public void allTicker() throws Exception {
+      URL url = new URL(PUB_MARKET_allTicker);
+      URLConnection urlConnection = url.openConnection();
+      urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+      InputStream inputStream = urlConnection.getInputStream();
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+      bufferedReader.lines().forEach(e -> System.out.print(e));
+  }
+```
+> ###### 行情-ticker
+```java
+  public void ticker() throws Exception {
+      String connUrl = PUB_MARKET_ticker + "?market=ceo_qc";
+      URL url = new URL(connUrl);
+      URLConnection urlConnection = url.openConnection();
+      urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+      InputStream inputStream = urlConnection.getInputStream();
+      BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+      bufferedReader.lines().forEach(e -> System.out.print(e));
+  }
+```
+> ###### 委托记录-entrust
+```java
+    public void entrust() throws Exception {
+        String connUrl = PUB_MARKET_entrust + "?market=ceo_qc";
+        URL url = new URL(connUrl);
         URLConnection urlConnection = url.openConnection();
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
         InputStream inputStream = urlConnection.getInputStream();
@@ -955,168 +1033,241 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
         bufferedReader.lines().forEach(e -> System.out.print(e));
     }
 ```
-
-> ###### 获取交易对信息 python demo
-
-```python
-url = ROOT_URL + '/open/api/v1/data/markets_info'
-response = requests.request('GET', url, headers=headers)
-print(response.json())
+> ###### 历史成交-trades
+```java
+    public void trades() throws Exception {
+        String connUrl = PUB_MARKET_trades + "?market=ceo_qc";
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 获取深度信息 python demo
-
-```python
-symbol = 'BTC_USDT'
-depth = 30
-params = {'market': symbol,
-          'depth': depth}
-url = ROOT_URL + '/open/api/v1/data/depth'
-response = requests.request('GET', url, params=params, headers=headers)
-print(response.json())
+> ###### K线-kline
+```java
+    public void kline() throws Exception {
+        String connUrl = PUB_MARKET_kline + "?market=ceo_qc&type=1min";
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 获取单个币种成交记录信息 python demo
-
-```python
-symbol = 'BTC_USDT'
-params = {'market': symbol}
-url = ROOT_URL + '/open/api/v1/data/history'
-response = requests.request('GET', url, params=params, headers=headers)
-print(response.json())
+> ###### 获取用户信息-accountInfo
+```java
+    public void accountInfo() throws Exception {
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "accountInfo");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_accountInfo + "?"+paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 获取市场行情信息 python demo
-
-```python
-symbol = 'BTC_USDT'
-params = {'market': symbol}
-url = ROOT_URL + '/open/api/v1/data/ticker'
-response = requests.request('GET', url, params=params, headers=headers)
-print(response.json())
+> ###### 委托下单-order
+```java
+    public void order() throws Exception {
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "order");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("price", "6000");
+        params.put("amount", "0.113");
+        params.put("tradeType",  "1");
+        params.put("currency", "ceo_qc");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_order + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 获取市场K线信息 python demo
-
-```python
-import time
-symbol = 'BTC_USDT'
-params = {'market': symbol,
-          'interval': '1m',
-          'startTime': int(time.time() / 60) * 60 - 60 * 5,
-          'limit': 5}
-url = ROOT_URL + '/open/api/v1/data/kline'
-response = requests.request('GET', url, params=params, headers=headers)
-print(response.json())
+> ###### 取消委托-cancelOrder
+```java
+    public void cancelOrder() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "cancelOrder");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo_qc");
+        params.put("id", "1");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_cancelOrder + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-* 私有
-
-```python
-import time
-import hashlib
-
-API_KEY = 'your api key'
-SECRET_KEY = 'your secret key'
-
-def sign(params):
-    sign = ''
-    for key in sorted(params.keys()):
-        sign += key + '=' + str(params[key]) + '&'
-    response_data = sign + 'api_secret=' + SECRET_KEY
-    return hashlib.md5(response_data.encode("utf8")).hexdigest()
+> ###### 获取委托买单或卖单-getOrder
+```java
+    public void getOrder() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getOrder");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo_qc");
+        params.put("id", "64");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getOrder + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 获取账户资产信息 python demo
-
-```python
-url = ROOT_URL + '/open/api/v1/private/account/info'
-params = {'api_key': API_KEY,
-          'req_time': time.time()}
-params.update({'sign': sign(params)})
-response = requests.request('GET', url, params=params, headers=headers)
-print(response.json())
+> ###### 获取多个委托买单或卖单-getOrders
+```java
+    public void getOrders() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getOrders");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo_qc");
+        params.put("pageIndex", "1");
+        params.put("pageSize", "10");
+        params.put("tradeType", "1");
+        params.put("tradeStatus", "0");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getOrders + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 获取当前委托信息 python demo
-
-```python
-symbol = 'BTC_USDT'
-trade_type = 0
-params = {'api_key': API_KEY,
-          'req_time': time.time(),
-          'market': symbol,
-          'trade_type': trade_type,  # 交易类型，0/1/2 (所有/买/卖)
-          'page_num': 1,
-          'page_size': 50}
-params.update({'sign': sign(params)})
-url = ROOT_URL + '/open/api/v1/private/current/orders'
-response = requests.request('GET', url, params=params, headers=headers)
-print(response.json())
+> ###### 获取交易记录-getTrades
+```java
+    public void getTrades() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getTrades");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo_qc");
+        params.put("pageIndex", "1");
+        params.put("pageSize", "10");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getTrades + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 下单 python demo
-
-```python
-symbol = 'BTC_USDT'
-price = 9999
-quantity = 66
-trade_type = 1  # 1/2 (买/卖)
-params = {'api_key': API_KEY,
-          'req_time': time.time(),
-          'market': symbol,
-          'price': price,
-          'quantity': quantity,
-          'trade_type': trade_type}
-params.update({'sign': sign(params)})
-url = ROOT_URL + '/open/api/v1/private/order'
-response = requests.request('POST', url, params=params, headers=headers)
-print(response.json())
+> ###### 获取用户充值地址-getUserAddress
+```java
+    public void getUserAddress() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getUserAddress");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getUserAddress + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 取消订单 python demo
-
-```python
-symbol = 'BTC_USDT'
-order_id = '3cd4bd41-****-****-****-d593f8eea202'
-params = {'api_key': API_KEY,
-          'req_time': time.time(),
-          'market': symbol,
-          'trade_no': order_id}
-params.update({'sign': sign(params)})
-url = ROOT_URL + '/open/api/v1/private/order'
-response = requests.request('DELETE', url, params=params, headers=headers)
-print(response.json())
+> ###### 获取用户的数字币提现地址-getWithdrawAddress
+```java
+    public void getWithdrawAddress() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getWithdrawAddress");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getWithdrawAddress + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 查询账号历史委托记录 python demo
-
-```python
-symbol = 'EOS_ETH'
-deal_type = 1
-params = {'api_key': API_KEY,
-          'req_time': time.time(),
-          'market': symbol,
-          'trade_type': deal_type,
-          'page_num': 1,
-          'page_size': 70}
-params.update({'sign': sign(params)})
-url = ROOT_URL + '/open/api/v1/private/orders'
-response = requests.request('GET', url, params=params)
-print(response.json())
+> ###### 获取数字币提现记录-getWithdrawRecord
+```java
+    public void getWithdrawRecord() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getWithdrawRecord");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo");
+        params.put("pageIndex", "1");
+        params.put("pageSize", "10");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getWithdrawRecord + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
-
-> ###### 查询订单状态 python demo
-
-```python
-symbol = 'EOS_ETH'
-trade_no = 'f5718b8a-8f93-4880-8e95-281fe28efb91'
-params = {'api_key': API_KEY,
-          'req_time': time.time(),
-          'market': symbol,
-          'trade_no': trade_no}
-params.update({'sign': sign(params)})
-url = ROOT_URL + '/open/api/v1/private/order'
-response = requests.request('GET', url, params=params)
-print(response.json())
+> ###### 获取数字币充值记录-getChargeRecord
+```java
+  public void getChargeRecord() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getChargeRecord");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("currency", "ceo");
+        params.put("pageIndex", "1");
+        params.put("pageSize", "10");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getChargeRecord + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
 ```
