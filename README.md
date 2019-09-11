@@ -44,8 +44,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 * [委托下单](#委托下单)
 * [取消委托](#取消委托)
 * [获取委托买单或卖单](#获取委托买单或卖单)
-* [获取用户信息](#获取用户信息)
 * [获取多个委托买单或卖单](#获取多个委托买单或卖单)
+* [获取交易记录](#获取交易记录)
 * [获取用户充值地址](#获取用户充值地址)
 * [获取用户的数字币提现地址](#获取用户的数字币提现地址)
 * [获取数字币提现记录](#获取数字币提现记录)
@@ -97,653 +97,972 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
               ......
 }
 ```
-
-**返回值说明**
-
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| data        |  包含所有交易对的数组   |
-
-**示例**
-
-[python](#获取市场列表信息-python-demo)
-
 ----
-
 ### **行情**
+*Request*
+> Method: GET
+>
+> URL: api/market/ticker
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:   | :-----:  |  :-----:  |  :-----:  |
+> | market        | string   |  Y   |  市场名称   |
+>
+> api/market/ticker?market=ceo_qc
+>
+*Response*
 
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "buy": "91.00000000", //买一价
+              "sell": "91.50000000", //卖一价
+              "last": "90.00000000", //最新成交价
+              "vol": "0.00000000", //成交量(最近的24小时)
+              "high": "0.00000000", //最高价
+              "low": "0.00000000", //最低价
+              "time": 1535012914 //时间
+          }
+}
+```
+----
 ### **委托记录**
+*Request*
+> Method: GET
+>
+> URL: api/market/entrust
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:   | :-----:  |  :-----:  |  :-----:  |
+> | market        | string   |  Y   |  市场名称   |
+>
+> api/market/entrust?market=ceo_qc
+>
+*Response*
 
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "b": [ //买
+                  [
+                      "11.37", //价格
+                      "877.627331" //数量
+                  ],
+                  [
+                      "11.01",
+                      "1018.843536"
+                  ],
+              ],
+              "s": [ //卖
+                  [
+                      "70.00", //
+                      "1000.000000"
+                  ],
+                  [
+                      "60.00",
+                      "1000.000000"
+                  ]
+          ]
+}
+```
+----
 ### **历史成交**
+*Request*
+> Method: GET
+>
+> URL: api/market/trades
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:   | :-----:  |  :-----:  |  :-----:  |
+> | market        | string   |  Y   |  市场名称   |
+>
+> api/market/trades?market=bit_qc
+>
+*Response*
 
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": [
+              {
+                  "amount": "5000.000000", //交易数量
+                  "price": "0.400000", //交易价格
+                  "type": 2, //交易类型，1(买)/2(卖)
+                  "time": 1530144000 //交易时间(时间戳)
+              },
+              {
+                  "amount": "5000.000000",
+                  "price": "0.400000",
+                  "type": 1,
+                  "time": 1530144000
+              },
+              ......
+}
+```
+----
 ### **K线**
+*Request*
+> Method: GET
+>
+> URL: api/market/kline
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> | market      | string   |  Y   |  市场名称   |
+> | type        | string    |Y   |  时间   |
+> | size        | int       | Y  |返回数据的条数限制(默认为1000，大于1000，只返回1000)|
+>
+> type 值为： 1min 3min 5min 15min 30min 1day 3day 1week 1hour 2hour 4hour 6hour 12hour
+>
+> api/market/kline?market=bit_qc&type=1week
+>
+*Response*
 
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "sellCoin": "bit", //卖出货币
+              "buyCoin": "qc", //买入货币
+              "data": [
+                  [
+                      1518843600, //时间戳
+                      "2550558.083140", //交易量
+                      "1.322000", //开盘价
+                      "1.396000", //最高价
+                      "1.005000", //最低价
+                      "1.031000" //收盘价
+                  ],
+              ......
+}
+```
+----
 ### **获取用户信息**
+*Request*
+> Method: GET
+>
+> URL: api/deal/accountInfo
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 accountInfo|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+>
+> api/deal/accountInfo?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=accountInfo&
+> sign=3967426b6a1aaa3f26a2c7b382a50621&reqTime=1535102429
+>
+*Response*
 
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "base": {
+                  "auth_google_enabled": false, //是否开通谷歌验证
+                  "auth_mobile_enabled": true, //是否开通手机验证
+                  "trade_password_enabled": true, //是否开通交易密码
+                  "username": "test" //用户名
+              },
+              "coins": [
+                  {
+                      "enName": "btc", //币种英文名
+                      "cnName": "比特币", //币种中文名
+                      "symbol": "฿", //币种符号
+                      "available": "86114.16208700", //可用资产
+                      "freez": "0.00000000", //冻结资产
+                      "unitDecimal": "2", //保留小数位
+                      "isCanRecharge": true, //是否可充值
+                      "isCanWithdraw": true //是否可提现
+                  },
+              ......
+}
+```
+----
 ### **委托下单**
+*Request*
+> Method: GET
+>
+> URL: api/deal/order
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 order|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |price|	float	|Y|	单价|
+> |amount|	float	|Y	|交易数量|
+> |tradeType|	int	|Y	|交易类型1/2[买/卖]|
+> |currency	|string|	Y|	市场名字|
+>
+> api/deal/order?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=order&
+> sign=f7169edac202a776b87811661817aeeb&reqTime=1535102429&price=60000&amount=0.113&tradeType=1&currency=btc_qc
+>
+*Response*
 
+```json
+{
+              "code": 1000,
+              "message": "委托挂单成功",
+              "data": {
+                  "orderId": "643" //订单ID
+              }
+}
+```
+----
 ### **取消委托**
+*Request*
+> Method: GET
+>
+> URL: api/deal/cancelOrder
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 cancelOrder|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	市场名字|
+> |id|	int	|Y|	订单ID|
+>
+> api/deal/cancelOrder?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=cancelOrder&
+> sign=1cb2d3c0d1fd708abb7eda37770172b5&reqTime=1535102429&id=626&currency=btc_qc
+>
+*Response*
 
+```json
+{
+          "code": 1000,
+          "message": "撤销成功",
+          "data": ""
+}
+```
+----
 ### **获取委托买单或卖单**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getOrder
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getOrder|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	市场名字|
+> |id|	int	|Y|	订单ID|
+>
+> api/deal/getOrder?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=getOrder&
+> sign=d712dfa60eaf5bc4053ebcd4af5ec253&reqTime=1535102429&id=626&currency=btc_qc
+>
+*Response*
 
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "currency": "btc_qc", //市场
+              "id": 626, //委托挂单号
+              "price": "60000.000000", //单价
+              "status": 2, ////挂单状态 (状态(0:交易中,1:已完成,2:已撤销, 3:部分成交))
+              "total_amount": "0.113000", //挂单总数量
+              "trade_amount": "0.000000", //已成交数量
+              "trade_time": 1534301098, //委托时间
+              "trade_money": "6793.560000", //总交易金额
+              "type": 1 //挂单类型 1/2[buy/sell]
+              "deal_money": "15.560000", //实际成交金额
+          }
+}
+```
+----
+### **获取多个委托买单或卖单**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getOrders
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getOrders|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	市场名字|
+> |pageIndex|	int	|Y|	当前页数|
+> |pageSize	|int	|Y	|每页数量 10-100|
+> |tradeType|	int	|N|	交易类型1/2[buy/sell]|
+> |tradeStatus|	int|	N|	交易状态 0:交易中,1:已完成,2:已撤销,3:部分成交,4:合并1与3|
+>
+> api/deal/getOrders?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=getOrders&
+>sign=6ed7b69018b4c151b2cf77f531a655a0&reqTime=1535102429&currency=btc_qc&pageIndex=1&pageSize=10&tradeStatus=1
+>
+*Response*
+
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": [
+              {
+                  "currency": "btc_qc", //市场
+                  "id": 631, //委托挂单号
+                  "price": "60000.000000", //单价
+                  "status": 0, //挂单状态 (状态(0:交易中,1:已完成,2:已撤销, 3:部分成交))
+                  "total_amount": "0.113000", //挂单总数量
+                  "trade_amount": "0.000000", //已成交数量
+                  "trade_date": 1535162354, //委托时间
+                  "trade_money": "6793.560000", //总交易金额
+                  "type": 1 //挂单类型 1/2[buy/sell]
+              },
+              ......
+}
+```
+----
+### **获取交易记录**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getTrades
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getTrades|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	市场名字|
+> |pageIndex|	int	|Y|	当前页数|
+> |pageSize|	int	|Y|	每页数量 10-100|
+> |orderId	|int|	Y	|订单编号|
+> |startTime|	int|	Y|	开始时间毫秒数|
+> |endTime	|int	|Y|	结束时间毫秒数|
+>
+> api/deal/getTrades?accesskey=f11c8358-9b30-4a5c-9c2d-906e4adb71d0&method=getTrades&
+> sign=6ed7b69018b4c151b2cf77f531a655a0&reqTime=1535102429&pageIndex=1&currency=ceo_qc&
+> pageSize=10&orderId=16&startTime=1566355654&endTime=1566371318
+>
+*Response*
+
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": [
+              {
+                  "currency": "ceo_qc", //市场
+                  "id": 571, //交易id
+                  "price": "36.000000", //单价
+                  "amount": "0.261040", //交易量
+                  "type": 1, //交易类型 1/2[buy/sell]
+                  "date": 1538276466, //时间
+                  "fee": "0.000210" //手续费
+              }
+          ]
+}
+```
+----
 ### **获取用户充值地址**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getUserAddress
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getUserAddress|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	币名|
+>
+> api/deal/getUserAddress?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=getUserAddress&
+> sign=469595363c7a04a9b1f693273397cbc0&reqTime=1535102429&currency=gxs
+>
 
+*Response*
+
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "address": "qqfewfew", //地址
+              "memo": "99" //备注
+          }
+}
+```
+----
 ### **获取用户的数字币提现地址**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getWithdrawAddress
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getWithdrawAddress|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	币名|
+>
+> api/deal/getWithdrawAddress?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=getWithdrawAddress&
+> sign=620f6c274e4dd0e9cd8312a8765f2c17&reqTime=1535102429&currency=btc
+>
 
+*Response*
+
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": [
+              "1DZdA2WAzcsSak3tQYRVwuXWeSqhLuVCoA",
+              "1DZdA2WAzcsSak3tQYRVwuXWeSqhLuVCoc"
+          ]
+}
+```
+----
 ### **获取数字币提现记录**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getWithdrawRecord
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getWithdrawRecord|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	币名|
+> |pageIndex|	int|	Y|	当前页数|
+> |pageSize|	int	|Y	|每页数量|
+>
+> api/deal/getWithdrawRecord?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=getWithdrawRecord&
+> sign=0e94e185a41dcf339491bd4c6c958dea&reqTime=1535102429&currency=btc&pageIndex=1&pageSize=10
+>
 
+*Response*
+
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "pageIndex": 1, //当前页数
+              "pageSize": 10, //每页数量
+              "totalCount": 7, //总数量
+              "totalPage": 1, //总页数
+              "list": [
+                  {
+                      "amount": "5.00000000", //提现金额
+                      "fees": "0.00150000", //提现手续费
+                      "id": 165558, //提现记录id
+                      "manageTime": 0, //提现处理的时间的时间戳
+                      "status": 0, //提币状态状态（0：等待处理；1：转出成功；2：已经审核；3：已经撤销）
+                      "submitTime": 1534920264, //提现发起的时间的时间戳
+                      "toAddress": "1DZdA2WAzcsSak3tQYRVwuXWeSqhLuVCoc" //提现的接收地址
+                  },
+                  ......
+}
+```
+----
 ### **获取数字币充值记录**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getChargeRecord
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getChargeRecord|
+> |reqTime|	int	|Y|	当前时间毫秒数|
+> |sign	|string	|Y|	签名串|
+> |currency	|string|	Y|	币名|
+> |pageIndex|	int|	Y|	当前页数|
+> |pageSize|	int	|Y	|每页数量|
+>
+> api/deal/getChargeRecord?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=getChargeRecord&
+> sign=538b6d053c32cd83f97fd2cfadfb7f31&reqTime=1535102429&currency=eth&pageIndex=1&pageSize=10
+>
 
+*Response*
+
+```json
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "pageIndex": 1, //当前页数
+              "pageSize": 10, //每页数量
+              "totalCount": 2, //总数量
+              "totalPage": 1, //总页数
+              "list": [
+                  {
+                      "address": "0x5de61aec70dc1654456f75aa964daf754d2a7f30", //
+                      "amount": "0.01050000",
+                      "confirmTimes": 3,
+                      "currency": "ETH",
+                      "hash": "0x84d073ef430e53e5b21bb35831b135ce217a69efbadddc187b9380fa3fdd5a3b",
+                      "id": 19813,
+                      "status": 1,
+                      "submit_time": 1511961018,
+                      "type": "站外"
+                  },
+                  {
+                      "address": "0x5de61aec70dc1654456f75aa964daf754d2a7f30",
+                      "amount": "5.00000000",
+                      "confirmTimes": 0,
+                      "currency": "ETH",
+                      "hash": "",
+                      "id": 15,
+                      "status": 1,
+                      "submit_time": 1507882027,
+                      "type": "系统充值"
+                  }
+              ]
+          }
+}
+```
+----
 ### **Response状态**
-
+> 1000; //成功
+>
+> 1001; //一般错误
+>
+> 1002; //内部错误
+>
+> 1003; //验证不通过
+>
+> 1004; //网站维护中
+>
+> 1005;// API接口维护中
+>
+> 1006; //权限不足
+>
+> 1007; //无效的参数
+>
+> 1008; //无效的IP或与绑定的IP不一致
+----
 ### **签名方式**
+>请求参数按照ASCII值排序，然后通过hmac MD5加密
+>
+*javascript*
+```javascript
+    function sign(params, secretKey) {
+            if (typeof params != 'object') {
+                throw Error('参数必须为对象')
+            }
+            let preSign = [];
+            for (let key of Object.keys(params).sort()) {
+                preSign.push(key+'='+params[key]);
+            }
+            return CryptoJS.HmacMD5(preSign.join('&'), secretKey).toString();
+    }
+```
+*php*
+```php
+    function sign(array $params, $secretKey)
+    {
+        ksort($params);
+        $preSign = http_build_query($params, '', '&');
+        $sign = hash_hmac('md5', $preSign, $secretKey);
+        return $sign;
+    }
+```
+*java*
+> 代码库中 SignUtil.java
+>
+*postman 交易API测试*
+> Params
+>
+> | 参数名        |     值      |
+> | :--------:  | :-----:   |
+> |reqTime|{{sign}}	|
+> |sign	|{{reqTime}}|
+>
+*Pre-request Script*
+```javascript
+    function signfn(params, secretKey) {
+        let preSign = [];
+        for (let key of Object.keys(params).sort()) {
+            if (key == 'sign') {
+                console.log(params[key]);
+            }
+            if (key === 'sign' || params[key] === '') {
+                continue;
+            }
+            preSign.push(key+'='+params[key]);
+        }
+        return CryptoJS.HmacMD5(preSign.join('&'), secretKey).toString();
+    }
+
+    let now = Math.floor(Date.now());
+    pm.globals.set("reqTime",  now);
+    let query = {};
+    pm.request.url.query.all().forEach((param) => { query[param.key] = param.value});
+    query.reqTime = now;
+    pm.globals.set("sign",  signfn(query, '8d06dae1-72ef-4d9c-82ca-5210b1a1dc48'));
+```
+----
 
 ### **Ws获取全部市场行情**
+*Request*
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |event	|string|	Y	|addChannel|
+> |channel|	string|	Y	|all_ticker|
+>
+*Response*
 
+```json
+        {
+             "channel": "all_ticker",
+             "date": "1472800466093",
+             "data":
+             {
+                 "ceo_qc": { //  市场名
+                 "buy": "91.00000000", //  买一价
+                 "sell": "91.50000000", //  卖一价
+                 "last": "90.00000000", //  最新成交价
+                 "vol": "0.00000000", //  成交量(最近的24小时)
+                 "high": "0.00000000", //  最高价
+                 "low": "0.00000000" //  最低价
+                 },
+                 "eth_ceo": {
+                     "buy": "52.18000000",
+                     "sell": "53.30000000",
+                     "last": "53.30000000",
+                     "vol": "5.00000000",
+                     "high": "53.30000000",
+                     "low": "53.00000000"
+                 },
+                 ......
+             }
+         }
+```
+----
 ### **Ws获取市场行情**
+*Request*
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |event	|string|	Y	|addChannel|
+> |channel|	string|	Y	|ceo_qc_ticker|
+>
+*Response*
 
+```json
+      {
+            "channel": "ceo_qc_ticker",
+            "date": "1472800466093",
+            "ticker":
+            {
+                "buy": "91.00000000", //  市场名
+                "sell": "91.50000000", //  买一价
+                "last": "90.00000000", //  卖一价
+                "vol": "0.00000000", //  最新成交价
+                "high": "0.00000000", //  成交量(最近的24小时)
+                "low": "0.00000000" //  最高价
+            }
+        }
+```
+----
 ### **Ws获取市场深度**
+*Request*
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |event	|string|	Y	|addChannel|
+> |channel|	string|	Y	|ceo_qc_order|
+>
+*Response*
 
+```json
+      {
+           "date" : 1567582150426 ,
+           "b": [ // 买
+               [
+                   "11.37", //  价格
+                   "877.627331" //  数量
+               ],
+               [
+                   "11.37"
+                   "877.627331"
+               ],
+               ......
+           ],
+           "s":[ // 卖
+               [
+                   "11.37"
+                   "877.627331"
+               ],
+               [
+                   "11.37",
+                   "877.627331"
+               ],
+               ......
+           ],
+           "channel": "ceo_qc_order"
+       }
+```
+----
 ### **Ws获取历史成交**
+*Request*
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |event	|string|	Y	|addChannel|
+> |channel|	string|	Y	|ceo_qc_trade|
+>
+*Response*
 
+```json
+       {
+            "date" : 1567582150426 ,
+            "data": [
+                {
+                    "amount": "5000.000000", //  交易数量
+                    "price": "0.400000", //  交易价格
+                    "type": 2, //  交易类型，1(买)/2(卖)
+                    "time": 1530144000 //  交易时间(时间戳)
+                },
+                ......
+            ],
+            "channel": "ceo_qc_trade"
+        }
+```
+----
 ### **访问限制**
 
-### **获取全币种行情**
+>单个IP限制每分钟3000次访问
+>
+>交易API单个用户限制每秒钟50次访问
 
-* GET `api/market/allTicker`
 
-**请求参数**
+ #### 接口示例
 
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
+* 公共
 
-**返回值**
+```python
+import requests
 
-```json
-{
-    "code": 200,
-    "data": [
-        "btc_usdt",
-        "eth_usdt"
-    ],
-    "msg": "OK"
+ROOT_URL = 'https://www.mxc.com'
+
+headers = {
+    'Content-Type': 'application/json',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36',
+    "Accept": "application/json",
 }
 ```
 
-**返回值说明**
+> ###### 获取市场列表信息 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| data        |  包含所有交易对的数组   |
-
-**示例**
-
-[python](#获取市场列表信息-python-demo)
-
-----
-
-### **行情**
-
-* GET `api/market/ticker`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": {
-        "ETC_BTC": {
-            "priceScale": 6,
-            "quantityScale": 2,
-            "minAmount": 0.0001,
-            "buyFeeRate": 0.002,
-            "sellFeeRate": 0.002
-        },
-        "BTC_USDT": {
-            "priceScale": 2,
-            "quantityScale": 6,
-            "minAmount": 0.1,
-            "buyFeeRate": 0.002,
-            "sellFeeRate": 0.002
-        }
-    },
-    "msg": "OK"
-}
+```python
+url = ROOT_URL + '/open/api/v1/data/markets'
+response = requests.request('GET', url, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 获取交易对信息 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| priceScale        |  价格精度   |
-| quantityScale        |  数量精度   |
-| minAmount        |  最小量   |
-| buyFeeRate        |  买单费率   |
-| sellFeeRate        |  卖单费率   |
-
-**示例**
-
-[python](#获取交易对信息-python-demo)
-
-----
-
-## **获取深度信息**
-
-* GET `/open/api/v1/data/depth`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| depth        | integer   |  √   |  返回的深度个数   |
-| market        | string   |  √   |  交易对名称   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": {
-        "asks": [
-            {
-                "price": "7061.82",
-                "quantity": "2.759119"
-            },
-            {
-                "price": "7062.4",
-                "quantity": "0.01764"
-            }
-        ],
-        "bids": [
-            {
-                "price": "7061.8",
-                "quantity": "0.160269"
-            },
-            {
-                "price": "7059.68",
-                "quantity": "0.26862"
-            }
-        ]
-    },
-    "msg": "OK"
-}
+```python
+url = ROOT_URL + '/open/api/v1/data/markets_info'
+response = requests.request('GET', url, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 获取深度信息 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| price        |  价格   |
-| quantity        |  数量   |
-
-**示例**
-
-[python](#获取深度信息-python-demo)
-
-----
-
-## **获取单个币种成交记录信息**
-
-* GET `/open/api/v1/data/history`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| market        | string   |  √   |  交易对名称   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": [
-        {
-            "tradeTime": "2019-05-13 14:12:58.787",
-            "tradePrice": "7051.04",
-            "tradeQuantity": "0.0189",
-            "tradeType": "1"
-        },
-        {
-            "tradeTime": "2019-05-13 14:12:58.494",
-            "tradePrice": "7051.04",
-            "tradeQuantity": "0.023551",
-            "tradeType": "1"
-        }
-    ],
-    "msg": "OK"
-}
+```python
+symbol = 'BTC_USDT'
+depth = 30
+params = {'market': symbol,
+          'depth': depth}
+url = ROOT_URL + '/open/api/v1/data/depth'
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 获取单个币种成交记录信息 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| tradeTime        |  成交时间   |
-| tradePrice        |  成交价格   |
-| tradeQuantity        |  成交量   |
-| tradeType        |  成交类型1/2 (买/卖)   |
-
-**示例**
-
-[python](#获取单个币种成交记录信息-python-demo)
-
-----
-
-## **获取市场行情信息**
-
-* GET `/open/api/v1/data/ticker`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| market        | string   |  ×   |  交易对   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": {
-        "volume": "29821.449121",
-        "high": "7512.22",
-        "low": "6791.23",
-        "buy": "7054.5",
-        "sell": "7054.95",
-        "open": "7304.1",
-        "last": "7054.46"
-    },
-    "msg": "OK"
-}
+```python
+symbol = 'BTC_USDT'
+params = {'market': symbol}
+url = ROOT_URL + '/open/api/v1/data/history'
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 获取市场行情信息 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| volume        |  24小时成交量   |
-| high        |  24小时最高价   |
-| low        |  24小时最低价   |
-| buy        |  买一价   |
-| sell        |  卖一价   |
-| open        |  开盘价   |
-| last        |  最后成交价   |
-
-**示例**
-
-[python](#获取市场行情信息-python-demo)
-
-----
-
-## **获取市场k线信息**
-
-* GET `/open/api/v1/data/kline`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| market       | string   |  √   |  交易对   |
-| interval     | string   |  √   |  时间间隔(分钟制:1m，5m，15m，30m，60m。小时制:1h，天制:1d，月制:1M)|
-| startTime    | long     |  √   |  起始时间(单位秒,毫秒数/1000 ) |
-| limit        | long     |  ×   |  返回条数 |
-
-**返回值说明**
-
-```json
-{
-    "code": 200,
-    "data": [
-        [
-            1557728040,
-            "7054.7",
-            "7056.26",
-            "7056.29",
-            "7054.16",
-            "9.817734",
-            "69264.52975125"
-        ],
-        [
-            1557728100,
-            "7056.26",
-            "7042.17",
-            "7056.98",
-            "7042.16",
-            "23.694823",
-            "167007.92840231"
-        ],
-        [
-            1557728160,
-            "7042.95",
-            "7037.11",
-            "7043.27",
-            "7036.53",
-            "22.510102",
-            "158461.98283462"
-        ]
-    ],
-    "msg": "OK"
-}
+```python
+symbol = 'BTC_USDT'
+params = {'market': symbol}
+url = ROOT_URL + '/open/api/v1/data/ticker'
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
 ```
 
-| 返回值       |  说明   |
-| :--------:  | :-----:  |
-| time        |  开始时间 (单位秒,毫秒数/1000 )  |
-| open        |  开盘价   |
-| close       |  收盘价   |
-| high        |  最高价   |
-| low         |  最低价   |
-| vol         |  成交量   |
-| amount      |  计价货币成交量   |
+> ###### 获取市场K线信息 python demo
 
-**示例**
-
-[python](#获取市场K线信息-python-demo)
-
-----
-
-## **获取账户资产信息**
-
-* GET `/open/api/v1/private/account/info`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| api_key         | string   |  √   |  您的api key   |
-| req_time          | string   |  √   |  请求时间戳   |
-| sign          | string   |  √   |  请求签名   |
-
-**返回值**
-
-```json
-{
-    "BTC": {
-        "frozen": "0",
-        "available": "130440.28790112"
-    },
-    "ETH": {
-        "frozen": "27.6511928",
-        "available": "12399653.86856669"
-    }
-}
+```python
+import time
+symbol = 'BTC_USDT'
+params = {'market': symbol,
+          'interval': '1m',
+          'startTime': int(time.time() / 60) * 60 - 60 * 5,
+          'limit': 5}
+url = ROOT_URL + '/open/api/v1/data/kline'
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+* 私有
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| frozen        |  冻结量   |
-| available        |  可用量   |
+```python
+import time
+import hashlib
 
-**示例**
+API_KEY = 'your api key'
+SECRET_KEY = 'your secret key'
 
-[python](#获取账户资产信息-python-demo)
-
-----
-
-## **获取当前委托信息**
-
-* GET `/open/api/v1/private/current/orders`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| api_key         | string   |  √   |  您的api key   |
-| market          | string   |  √   |  交易对   |
-| page_num           | integer   |  √   |  页数   |
-| page_size           | integer   |  √   |  每页大小   |
-| req_time            | string   |  √   |  请求时间戳   |
-| trade_type            | integer   |  √   |  交易类型，0/1/2 (所有/买/卖)   |
-| sign          | string   |  √   |  请求签名   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": [
-        {
-            "id": "4921e6be-cfb9-4058-89d3-afbeb6be7d78",
-            "market": "MX_ETH",
-            "price": "0.439961",
-            "status": "1",
-            "totalQuantity": "2",
-            "tradedQuantity": "0",
-            "tradedAmount": "0",
-            "createTime": "2019-05-13 14:31:11",
-            "type": 1
-        },
-        {
-            "id": "6170091f-c977-49bf-baa8-b643c70452c7",
-            "market": "MX_ETH",
-            "price": "0.4399605",
-            "status": "1",
-            "totalQuantity": "1",
-            "tradedQuantity": "0",
-            "tradedAmount": "0",
-            "createTime": "2019-05-13 14:30:51",
-            "type": 1
-        }
-    ],
-    "msg": "OK"
-}
+def sign(params):
+    sign = ''
+    for key in sorted(params.keys()):
+        sign += key + '=' + str(params[key]) + '&'
+    response_data = sign + 'api_secret=' + SECRET_KEY
+    return hashlib.md5(response_data.encode("utf8")).hexdigest()
 ```
 
-**返回值说明**
+> ###### 获取账户资产信息 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| id        |  订单id   |
-| market        |  交易对   |
-| price        |  挂单价   |
-| status        |  订单状态，1:未成交 2:已成交 3:部分成交 4:已撤单 5:部分撤单   |
-| totalQuantity        |  挂单总量   |
-| tradedQuantity        |  挂单成交量   |
-| tradedAmount        |  挂单成交量(计价币)   |
-| createTime        |  订单创建时间   |
-| type        |  订单类型1/2 (买/卖)   |
-
-**示例**
-
-[python](#获取当前委托信息-python-demo)
-
-----
-
-## **下单**
-
-* POST `/open/api/v1/private/order`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| api_key         | string   |  √   |  您的api key   |
-| market          | string   |  √   |  交易对   |
-| price            | string   |  √   |  交易价格   |
-| quantity            | string   |  √   |  交易数量   |
-| req_time            | string   |  √   |  请求时间戳   |
-| trade_type            | integer   |  √   |  交易类型：1/2 (买/卖)   |
-| sign          | string   |  √   |  请求签名   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": "de5a6819-5456-45da-9e51-ee258dd34422",
-    "msg": "OK"
-}
+```python
+url = ROOT_URL + '/open/api/v1/private/account/info'
+params = {'api_key': API_KEY,
+          'req_time': time.time()}
+params.update({'sign': sign(params)})
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 获取当前委托信息 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| data        |  订单id   |
-
-**示例**
-
-[python](#下单-python-demo)
-
-----
-
-## **取消订单**
-
-* DELETE `/open/api/v1/private/order`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| api_key         | string   |  √   |  您的api key   |
-| market          | string   |  √   |  交易对   |
-| req_time            | string   |  √   |  请求时间戳   |
-| trade_no             | string   |  √   |  委托单号   |
-| sign          | string   |  √   |  请求签名   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": null,
-    "msg": "OK"
-}
+```python
+symbol = 'BTC_USDT'
+trade_type = 0
+params = {'api_key': API_KEY,
+          'req_time': time.time(),
+          'market': symbol,
+          'trade_type': trade_type,  # 交易类型，0/1/2 (所有/买/卖)
+          'page_num': 1,
+          'page_size': 50}
+params.update({'sign': sign(params)})
+url = ROOT_URL + '/open/api/v1/private/current/orders'
+response = requests.request('GET', url, params=params, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 下单 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-
-**示例**
-
-[python](#取消订单-python-demo)
-
-----
-
-## **查询账号历史委托记录**
-
-* GET `/open/api/v1/private/orders`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| api_key         | string   |  √   |  您的api key   |
-| req_time          | string   |  √   |  请求时间戳   |
-| market          | string   |  √   |  交易对   |
-| trade_type            | string   |  √   |  交易类型，1/2 (买/卖)   |
-| page_num          | integer   |  √   |  页数   |
-| page_size             | integer   |  √   |  每页大小   |
-| sign          | string   |  √   |  请求签名   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": [
-        {
-            "id": "f5718b8a-8f93-4880-8e95-281fe28efb91",
-            "market": "OMG_ETH",
-            "price": "0.011546000000000000",
-            "status": "2",
-            "totalQuantity": "46.520000000000000000",
-            "tradedQuantity": "46.520000000000000000",
-            "tradedAmount": "0.537119920000000000",
-            "createTime": "2019-04-26 16:37:47.0",
-            "type": 1
-        },
-        {
-            "id": "845fdde0-6837-4d56-af8c-e43d72495cc1",
-            "market": "OMG_ETH",
-            "price": "0.011543000000000000",
-            "status": "2",
-            "totalQuantity": "7.920000000000000000",
-            "tradedQuantity": "7.920000000000000000",
-            "tradedAmount": "0.091420560000000000",
-            "createTime": "2019-04-26 11:05:42.0",
-            "type": 1
-        }
-    ],
-    "msg": "OK"
-}
+```python
+symbol = 'BTC_USDT'
+price = 9999
+quantity = 66
+trade_type = 1  # 1/2 (买/卖)
+params = {'api_key': API_KEY,
+          'req_time': time.time(),
+          'market': symbol,
+          'price': price,
+          'quantity': quantity,
+          'trade_type': trade_type}
+params.update({'sign': sign(params)})
+url = ROOT_URL + '/open/api/v1/private/order'
+response = requests.request('POST', url, params=params, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 取消订单 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| id        |  订单id   |
-| market        |  交易对   |
-| price        |  成交价格   |
-| status        |  订单状态，1:未成交 2:已成交 3:部分成交 4:已撤单 5:部分撤单   |
-| totalQuantity        |  订单总量   |
-| createTime        |  订单时间   |
-| type        |  交易类型：1/2 (买/卖)   |
-
-**示例**
-
-
-[python](#查询账号历史委托记录-python-demo)
-
-----
-
-## **查询订单状态**
-
-* GET `/open/api/v1/private/order`
-
-**请求参数**
-
-| 参数        | 类型   |  是否必须   |  说明   |
-| :--------:   | :-----:  |  :-----:  |  :-----:  |
-| api_key         | string   |  √   |  您的api key   |
-| req_time          | string   |  √   |  请求时间戳   |
-| market          | string   |  √   |  交易对   |
-| trade_no            | string   |  √   |  订单id，如果有多个，用英文逗号分隔，一次最多查询20个   |
-| sign          | string   |  √   |  请求签名   |
-
-**返回值**
-
-```json
-{
-    "code": 200,
-    "data": {
-        "id": "f5718b8a-8f93-4880-8e95-281fe28efb91",
-        "market": "OMG_ETH",
-        "price": "0.011546",
-        "status": "2",
-        "totalQuantity": "46.52",
-        "tradedQuantity": "46.52",
-        "tradedAmount": "0.53711992",
-        "createTime": "2019-04-26 16:37:47",
-        "type": 1
-    },
-    "msg": "OK"
-}
+```python
+symbol = 'BTC_USDT'
+order_id = '3cd4bd41-****-****-****-d593f8eea202'
+params = {'api_key': API_KEY,
+          'req_time': time.time(),
+          'market': symbol,
+          'trade_no': order_id}
+params.update({'sign': sign(params)})
+url = ROOT_URL + '/open/api/v1/private/order'
+response = requests.request('DELETE', url, params=params, headers=headers)
+print(response.json())
 ```
 
-**返回值说明**
+> ###### 查询账号历史委托记录 python demo
 
-| 返回值        |  说明   |
-| :--------:   | :-----:  |
-| id        |  订单id   |
-| market        |  交易对   |
-| price        |  下单价格   |
-| status        |  订单状态，1:未成交 2:已成交 3:部分成交 4:已撤单 5:部分撤单   |
-| totalQuantity        |  订单总量   |
-| tradedQuantity        |  成交总量   |
-| tradedAmount        |  成交量（计价货币）   |
-| createTime        |  下单时间   |
-| type        |  交易类型：1/2 (买/卖)   |
+```python
+symbol = 'EOS_ETH'
+deal_type = 1
+params = {'api_key': API_KEY,
+          'req_time': time.time(),
+          'market': symbol,
+          'trade_type': deal_type,
+          'page_num': 1,
+          'page_size': 70}
+params.update({'sign': sign(params)})
+url = ROOT_URL + '/open/api/v1/private/orders'
+response = requests.request('GET', url, params=params)
+print(response.json())
+```
 
+> ###### 查询订单状态 python demo
 
+```python
+symbol = 'EOS_ETH'
+trade_no = 'f5718b8a-8f93-4880-8e95-281fe28efb91'
+params = {'api_key': API_KEY,
+          'req_time': time.time(),
+          'market': symbol,
+          'trade_no': trade_no}
+params.update({'sign': sign(params)})
+url = ROOT_URL + '/open/api/v1/private/order'
+response = requests.request('GET', url, params=params)
+print(response.json())
+```
