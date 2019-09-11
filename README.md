@@ -2,16 +2,8 @@
 
 - - - - - -
 
-## 仓库代码说明
+## 代码结构说明
 
-* com.ceo.apidemo.apidemo.client： rest接口
-
-* com.ceo.apidemo.apidemo.wsclient： websocket接口
- > demo1 java客户端
- >
- > demo2 html代码 html可直接运行
-
- **结构说明**
 ```
  trade-api-demo
  ├─com.ceo.apidemo.apidemo.client      rest接口demo
