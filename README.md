@@ -10,6 +10,19 @@
  > demo1 java客户端
  >
  > demo2 html代码 html可直接运行
+```
+ trade-api-demo
+ ├─com.ceo.apidemo.apidemo.client      rest接口demo
+ │    ├─API.java         api测试例子
+ │    │
+ │    └─SignUtil.java    签名工具类
+ │
+ ├─com.ceo.apidemo.apidemo.wsclient     WebSocket接口demo
+ │    ├─demo1  java客户端
+ │    │
+ │    └─demo2  html客户端 html可直接运行
+ │    
+```
 
 
 ## 接口说明
