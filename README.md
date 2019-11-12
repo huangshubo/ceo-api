@@ -320,7 +320,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 ```
 *示例*
 
-[java](#交易对市场详情)
+[java](#市场详情-symbol)
 
 ----
 ### **历史成交记录2**
@@ -366,7 +366,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 ```
 *示例*
 
-[java](#历史成交记录2)
+[java](#历史成交记录-trades2)
 
 
 ----
@@ -1146,7 +1146,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
         bufferedReader.lines().forEach(e -> System.out.print(e));
     }
 ```
-> ###### 交易对市场详情
+> ###### 市场详情-symbol
 ```java
     public void symbol() throws Exception {
         String symbol = "usdt_qc";
@@ -1159,7 +1159,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
         bufferedReader.lines().forEach(e -> System.out.print(e));
     }
 ```
-> ###### 历史成交记录2
+> ###### 历史成交记录-trades2
 ```java
     public void trades2() throws Exception {
         String symbol = "usdt_qc";
