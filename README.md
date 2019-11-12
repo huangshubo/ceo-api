@@ -18,7 +18,6 @@
  │
 ```
 
-
 ## 接口说明
 
 CEO为用户提供了两种调用接口的方式，分别为：Rest和WebSocket，开发者可根据自身需求来选择适合自己的方式查询市场深度信息、交易和查询相关的交易记录
@@ -47,6 +46,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 * [委托记录](#委托记录)
 * [历史成交](#历史成交)
 * [K线](#K线)
+* [交易对市场详情](#交易对市场详情)
+* [历史成交记录2](#历史成交记录2)
 * [获取用户信息](#获取用户信息)
 * [委托下单](#委托下单)
 * [取消委托](#取消委托)
@@ -91,7 +92,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
                   "last": "90.00000000", //最新成交价
                   "vol": "0.00000000",   //成交量(最近的24小时)
                   "high": "0.00000000",  //最高价
-                  "low": "0.00000000"    //最低价
+                  "low": "0.00000000",   //最低价
+                  "change": "0.10"       //涨跌幅
               },
               "eth_ceo": {
                   "buy": "52.18000000",
@@ -99,7 +101,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
                   "last": "53.30000000",
                   "vol": "5.00000000",
                   "high": "53.30000000",
-                  "low": "53.00000000"
+                  "low": "53.00000000",
+                  "change": "0.10"
               },
               ......
 }
@@ -136,6 +139,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
               "vol": "0.00000000",   //成交量(最近的24小时)
               "high": "0.00000000",  //最高价
               "low": "0.00000000",   //最低价
+              "change": "0.10",      //涨跌幅
               "time": 1535012914     //时间
           }
 }
@@ -278,6 +282,92 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 *示例*
 
 [java](#K线-kline)
+
+
+----
+### **交易对市场详情**
+*Request*
+> Method: GET
+>
+> URL: api/market/symbol/{symbol}
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> | symbol      | string   |  Y   |  市场名称   |
+>
+>
+> api/market/symbol/usdt_qc
+>
+*Response*
+
+```html
+{
+    "code": 1000,
+    "message": "成功",
+    "data": {
+        "id": "symbol",                                   //交易对名称；string；required: true  对应我们的market
+        "baseCurrency": "usdt",                           //交易货币名称；string; required: true
+        "quoteCurrency": "qc",                            //计价货币名称；string；required: true
+        "quantityIncrement": "0.001",                     //数量精度；string；required: true
+        "tickSize": "0.00001",                            //价格精度；string；required: true
+        "takeLiquidityRate": "0.0012",                    // taker手续费率；string；
+        "provideLiquidityRate": "0.0012",                 //maker手续费率；string；
+        "feeCurrency": "qc"                               //手续费币种；string；        
+    }
+}
+```
+*示例*
+
+[java](#交易对市场详情)
+
+----
+### **历史成交记录2**
+*Request*
+> Method: GET
+>
+> URL: api/market/trades/{symbol}
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> | symbol      | string   |  Y   |  市场名称   |
+> | sort      | string   |  Y   |  排序方式   DESC   ASC    |
+> | by      | string   |  N   |  根据（ID/时间）排序  (id  timestamp)  |
+> | from      | string   |  N   |   如果by-ID;tradeid；;否则时间;string   |
+> | till      | string   |  N   |   如果by-ID;tradeid；;否则时间;string   |
+> | limit      | integer   |  N   |   获取数量，默认100；integer   |
+> | offset      | integer   |  N   |  查询记录的起始索引  起始为0  |
+>
+> api/market/trades/usdt_qc?sort=asc&by=timestamp&from=1573434000&till=1573436000&limit=100&offset=0
+>
+
+*Response*
+
+```html
+{
+    "code": 1000,
+    "message": "成功",
+    "data": [
+         {
+            "id": 3107340,
+            "uuid": "3107340",
+            "price": "0.00679",         //价格
+            "quantity": "1.046987",     //数量
+            "side": "buy",              //buy 买  sell 卖
+            "timestamp": "2019-11-08 13:28:49.0",   
+            "unixtimestamp": 1573219729
+          },
+        ......
+    ]
+}
+```
+*示例*
+
+[java](#历史成交记录2)
+
 
 ----
 ### **获取用户信息**
@@ -483,7 +573,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
                   "currency": "btc_qc", //市场
                   "id": 631, //委托挂单号
                   "price": "60000.000000", //单价
-                  "status": 0, //挂单状态 (状态(0:交易中,1:已完成,2:已撤销, 3:部分成交))
+                  "status": 0, //挂单状态 (状态(0:交易中,1:已完成,2:已撤销, 3:部分成交 4:部分成交已撤销))
                   "total_amount": "0.113000", //挂单总数量
                   "trade_amount": "0.000000", //已成交数量
                   "trade_date": 1535162354, //委托时间
@@ -842,12 +932,13 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
              "data":
              {
                  "ceo_qc": { //  市场名
-                 "buy": "91.00000000", //  买一价
-                 "sell": "91.50000000", //  卖一价
-                 "last": "90.00000000", //  最新成交价
-                 "vol": "0.00000000", //  成交量(最近的24小时)
-                 "high": "0.00000000", //  最高价
-                 "low": "0.00000000" //  最低价
+                     "buy": "91.00000000", //  买一价
+                     "sell": "91.50000000", //  卖一价
+                     "last": "90.00000000", //  最新成交价
+                     "vol": "0.00000000", //  成交量(最近的24小时)
+                     "high": "0.00000000", //  最高价
+                     "low": "0.00000000", //  最低价
+                     "change": "0.10"     //涨跌幅
                  },
                  "eth_ceo": {
                      "buy": "52.18000000",
@@ -855,7 +946,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
                      "last": "53.30000000",
                      "vol": "5.00000000",
                      "high": "53.30000000",
-                     "low": "53.00000000"
+                     "low": "53.00000000",
+                     "change": "0.10"     
                  },
                  ......
              }
@@ -882,7 +974,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
                 "last": "90.00000000", //  卖一价
                 "vol": "0.00000000", //  最新成交价
                 "high": "0.00000000", //  成交量(最近的24小时)
-                "low": "0.00000000" //  最高价
+                "low": "0.00000000", //  最高价
+                "change": "0.10"     //涨跌幅
             }
         }
 ```
@@ -968,6 +1061,10 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
     public static final String PUB_MARKET_trades = HOST + "/api/market/trades";
     //K线
     public static final String PUB_MARKET_kline = HOST + "/api/market/kline";
+    //获取交易对市场详情
+    public static final String PUB_MARKET_symbol = HOST + "/api/market/symbol/%s";
+    //历史成交记录2
+    public static final String PUB_MARKET_trades2 = HOST + "/api/market/trades/%s";
 
     //获取用户信息
     public static final String PRI_DEAL_accountInfo = HOST + "/api/deal/accountInfo";
@@ -1041,6 +1138,32 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 ```java
     public void kline() throws Exception {
         String connUrl = PUB_MARKET_kline + "?market=ceo_qc&type=1min";
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
+```
+> ###### 交易对市场详情
+```java
+    public void symbol() throws Exception {
+        String symbol = "usdt_qc";
+        String connUrl = String.format(PUB_MARKET_symbol, symbol);
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
+```
+> ###### 历史成交记录2
+```java
+    public void trades2() throws Exception {
+        String symbol = "usdt_qc";
+        String connUrl = String.format(PUB_MARKET_trades2, symbol) + "?sort=asc&by=timestamp&from=1573434000&till=1573436000&limit=100&offset=0";
         URL url = new URL(connUrl);
         URLConnection urlConnection = url.openConnection();
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
