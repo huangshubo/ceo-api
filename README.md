@@ -358,7 +358,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
     }
 }
 ```
-*示例*
+*Demo*
 
 [java](#市场详情-symbol)
 
@@ -450,7 +450,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
     ]
 }
 ```
-*示例*
+*Demo*
 
 [java](#条件查询成交记录-trades)
 
