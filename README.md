@@ -47,7 +47,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 * [历史成交](#历史成交)
 * [K线](#K线)
 * [交易对市场详情](#交易对市场详情)
-* [Get symbol info](#Get symbol info) 
+* [Get symbol info](#Get-symbol-info) 
 * [条件查询成交记录](#条件查询成交记录)
 * [Trades](#Trades)
 * [获取用户信息](#获取用户信息)
