@@ -322,6 +322,44 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 ```
 *示例*
 
+[java](#Get-symbol-info)
+
+----
+### **Get-symbol-info**
+*Request*
+> Method: GET
+>
+> URL: api/market/symbol/{symbol}
+>
+> Parameters:
+>
+> | Parameters  | type   |  required   |  description   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> | symbol      | string   |  Y   |  trading symbol   |
+>
+>
+> api/market/symbol/usdt_qc
+>
+*Response*
+
+```html
+{
+    "code": 1000,
+    "message": "成功",
+    "data": {
+        "id": "usdt_qc",                                  //The trading symbol
+        "baseCurrency": "usdt",                           //The main trading currency for this symbol
+        "quoteCurrency": "qc",                            //The secondary trading currency for this symbol
+        "quantityIncrement": "0.001",                     //Quantitative accuracyAll quantities must be divisible by this number, and cannot be less than this number
+        "tickSize": "0.00001",                            //Price accuracy，All prices must be divisible by this number, and cannot be less than this number
+        "takeLiquidityRate": "0.0012",                    //The buy/sell trading fee for taker orders. Taker orders remove an item from the order books
+        "provideLiquidityRate": "0.0012",                 //The buy/sell trading fee for maker orders. Maker orders add an item to the order books.
+        "feeCurrency": "qc"                               //The currency in which fees are taken   
+    }
+}
+```
+*示例*
+
 [java](#市场详情-symbol)
 
 ----
@@ -370,6 +408,51 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 
 [java](#条件查询成交记录-trades)
 
+----
+### **条件查询成交记录**
+*Request*
+> Method: GET
+>
+> URL: api/market/trades/{symbol}
+>
+> Parameters:
+>
+> | Parameters  | type   |  required   |  description   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> | symbol      | string   |  Y   |  trading symbol  |
+> | sort      | string   |  Y   |  Sort direction   (DESC ASC)   Default value: DESC |
+> | by      | string   |  N   |  Filter field  (id  timestamp)   Default value: timestamp|
+> | from      | string   |  N   | If filter by timestamp, then datetime in iso format or timestamp in millisecond otherwise trade id   |
+> | till      | string   |  N   | If filter by timestamp, then datetime in iso format or timestamp in millisecond otherwise trade id  |
+> | limit      | integer   |  N   | Default 100. Minimum value 1, Maximum value 1000   Default value: 100   |
+> | offset      | integer   |  N   | offset  Starting from 0|
+>
+> api/market/trades/usdt_qc?sort=asc&by=timestamp&from=1573434000&till=1573436000&limit=100&offset=0
+>
+
+*Response*
+
+```html
+{
+    "code": 1000,
+    "message": "成功",
+    "data": [
+         {
+            "id": 3107340,                              //ID   long
+            "uuid": "3107340",                          //UUID   Default ID
+            "price": "0.00679",                         //price
+            "quantity": "1.046987",                     //quantity
+            "side": "sell",                             //buy or sell  
+            "timestamp": "2019-11-08 13:28:49.0",       //timestamp
+            "unixtimestamp": 1573219729                 //unixtimestamp
+          },
+        ......
+    ]
+}
+```
+*示例*
+
+[java](#条件查询成交记录-trades)
 
 ----
 ### **获取用户信息**
