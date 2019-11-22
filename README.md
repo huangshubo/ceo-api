@@ -46,6 +46,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 * [委托记录](#委托记录)
 * [历史成交](#历史成交)
 * [K线](#K线)
+* [所有交易对市场详情](#所有交易对市场详情)
 * [交易对市场详情](#交易对市场详情)
 * [Get symbol info](#Get-symbol-info) 
 * [条件查询成交记录](#条件查询成交记录)
@@ -54,6 +55,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 * [委托下单](#委托下单)
 * [取消委托](#取消委托)
 * [获取委托买单或卖单](#获取委托买单或卖单)
+* [外部订单标识获取委托买单或卖单](#外部订单标识获取委托买单或卖单)
 * [获取多个委托买单或卖单](#获取多个委托买单或卖单)
 * [获取交易记录](#获取交易记录)
 * [获取单个订单交易记录](#获取单个订单交易记录)
@@ -287,6 +289,40 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 [java](#K线-kline)
 
 ----
+### **所有交易对市场详情**
+*Request*
+> Method: GET
+>
+> URL: api/market/allSymbol
+>
+> Parameters:
+> 无
+>
+> api/market/allSymbol
+>
+*Response*
+
+```html
+{
+    "code": 1000,
+    "message": "成功",
+    "data": [{
+        "id": "usdt_qc",                                  //交易对名称；string；required: true  
+        "baseCurrency": "usdt",                           //交易货币名称；string; required: true
+        "quoteCurrency": "qc",                            //计价货币名称；string；required: true
+        "quantityIncrement": "0.001",                     //数量精度；string；required: true
+        "tickSize": "0.00001",                            //价格精度；string；required: true
+        "takeLiquidityRate": "0.0012",                    //taker手续费率；string；
+        "provideLiquidityRate": "0.0012",                 //maker手续费率；string；
+        "feeCurrency": "qc"                               //手续费币种；string；        
+    }]
+}
+```
+*示例*
+
+[java](#所有交易对市场详情-symbol)
+
+----
 ### **交易对市场详情**
 *Request*
 > Method: GET
@@ -309,7 +345,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
     "code": 1000,
     "message": "成功",
     "data": {
-        "symbol": "usdt_qc",                              //交易对名称；string；required: true  
+        "id": "usdt_qc",                                  //交易对名称；string；required: true  
         "baseCurrency": "usdt",                           //交易货币名称；string; required: true
         "quoteCurrency": "qc",                            //计价货币名称；string；required: true
         "quantityIncrement": "0.001",                     //数量精度；string；required: true
@@ -322,7 +358,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 ```
 *示例*
 
-[java](#Get-symbol-info)
+[java](#市场详情-symbol)
 
 ----
 ### **Get-symbol-info**
@@ -374,8 +410,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | 参数        | 类型   |  必填   |  描述   |
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > | symbol      | string   |  Y   |  市场名称   |
-> | sort      | string   |  Y   |  排序方式   DESC   ASC    |
-> | by      | string   |  N   |  根据（ID/时间）排序  (id  timestamp)  |
+> | sort      | string   |  N   |  排序方式   DESC   ASC    默认 DESC |
+> | by      | string   |  N   |  根据（ID/时间）排序  (id  timestamp)  默认 timestamp|
 > | from      | string   |  N   |   如果by-ID;tradeid；;否则时间;string   |
 > | till      | string   |  N   |   如果by-ID;tradeid；;否则时间;string   |
 > | limit      | integer   |  N   |   获取数量，默认100；integer   |
@@ -420,7 +456,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | Parameters  | type   |  required   |  description   |
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > | symbol      | string   |  Y   |  trading symbol  |
-> | sort      | string   |  Y   |  Sort direction   (DESC ASC)   Default value: DESC |
+> | sort      | string   |  N   |  Sort direction   (DESC ASC)   Default value: DESC |
 > | by      | string   |  N   |  Filter field  (id  timestamp)   Default value: timestamp|
 > | from      | string   |  N   | If filter by timestamp, then datetime in iso format or timestamp in millisecond otherwise trade id   |
 > | till      | string   |  N   | If filter by timestamp, then datetime in iso format or timestamp in millisecond otherwise trade id  |
@@ -467,7 +503,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 accountInfo|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 >
 > api/deal/accountInfo?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=accountInfo&
@@ -519,13 +555,13 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 order|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |price|	float	|Y|	单价|
 > |amount|	float	|Y	|交易数量|
 > |tradeType|	int	|Y	|交易类型1/2[买/卖]|
 > |currency	|string|	Y|	市场名字|
->
+> |outerId	|string|N|	外部订单标识(非必填可不传)|
 > api/deal/order?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=order&
 > sign=f7169edac202a776b87811661817aeeb&reqTime=1535102429&price=60000&amount=0.113&tradeType=1&currency=btc_qc
 >
@@ -557,7 +593,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 cancelOrder|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	市场名字|
 > |id|	int	|Y|	订单ID|
@@ -591,7 +627,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 getOrder|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	市场名字|
 > |id|	int	|Y|	订单ID|
@@ -623,6 +659,51 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 
 [java](#获取委托买单或卖单-getOrder)
 
+
+----
+### **外部订单标识获取委托买单或卖单**
+*Request*
+> Method: GET
+>
+> URL: api/deal/getOrderByOuter
+>
+> Parameters:
+>
+> | 参数        | 类型   |  必填   |  描述   |
+> | :--------:  | :-----:  |  :-----:  |  :-----:  |
+> |accesskey	   |   string	   |Y      |	accesskey    |
+> |method	|string|	Y|	直接赋值 getOrderByOuter|
+> |reqTime|	int	|Y|	当前时间秒数|
+> |sign	|string	|Y|	签名串|
+> |outerId|	String	|Y|	外部订单ID|
+>
+> api/deal/getOrder?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=getOrderByOuter&
+> sign=d712dfa60eaf5bc4053ebcd4af5ec253&reqTime=1535102429&outerId=626
+>
+*Response*
+
+```html
+{
+          "code": 1000,
+          "message": "成功",
+          "data": {
+              "currency": "btc_qc", //市场
+              "id": 626, //委托挂单号
+              "price": "60000.000000", //单价
+              "status": 2, ////挂单状态 (状态(0:交易中,1:已完成,2:已撤销, 3:部分成交))
+              "total_amount": "0.113000", //挂单总数量
+              "trade_amount": "0.000000", //已成交数量
+              "trade_time": 1534301098, //委托时间
+              "trade_money": "6793.560000", //总交易金额
+              "type": 1 //挂单类型 1/2[buy/sell]
+              "deal_money": "15.560000", //实际成交金额
+          }
+}
+```
+*示例*
+
+[java](#外部订单标识获取委托买单或卖单-getOrderByOuter)
+
 ----
 ### **获取多个委托买单或卖单**
 *Request*
@@ -636,7 +717,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 getOrders|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	市场名字|
 > |pageIndex|	int	|Y|	当前页数|
@@ -686,7 +767,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 getTrades|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	市场名字|
 > |pageIndex|	int	|Y|	当前页数|
@@ -722,7 +803,6 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 
 [java](#获取交易记录-getTrades)
 
-
 ----
 ### **获取单个订单交易记录**
 *Request*
@@ -736,7 +816,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 tradeLog|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |orderId	|long|	Y|	订单ID|
 >
@@ -779,7 +859,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 getUserAddress|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	币名|
 >
@@ -816,7 +896,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 getWithdrawAddress|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	币名|
 >
@@ -853,7 +933,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 getWithdrawRecord|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	币名|
 > |pageIndex|	int|	Y|	当前页数|
@@ -906,7 +986,7 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > | :--------:  | :-----:  |  :-----:  |  :-----:  |
 > |accesskey	   |   string	   |Y      |	accesskey    |
 > |method	|string|	Y|	直接赋值 getChargeRecord|
-> |reqTime|	int	|Y|	当前时间毫秒数|
+> |reqTime|	int	|Y|	当前时间秒数|
 > |sign	|string	|Y|	签名串|
 > |currency	|string|	Y|	币名|
 > |pageIndex|	int|	Y|	当前页数|
@@ -1006,6 +1086,46 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 ```
 *java*
 > 代码库中 SignUtil.java
+```java
+    public static String sign(Map<String, String> paramMap, String secret) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        TreeMap<String, String> params = new TreeMap<>();
+        params.putAll(paramMap);
+        params.entrySet()
+                .forEach(entry -> {
+                    if (sb.length() > 0) {
+                        sb.append("&");
+                    }
+                    sb.append(entry.getKey()).append("=");
+                    sb.append(entry.getValue());
+                });
+        return sign(sb.toString(), secret);
+    }
+
+    public static String sign(String paramString, String secretKey) throws Exception {
+        SecretKeySpec secret_key = new SecretKeySpec(secretKey.getBytes(), "HmacMD5");
+        String actualSignature = "";
+        try {
+            actualSignature = Hex.encodeHexString(encodeHmacMD5(paramString.getBytes("UTF-8"), secret_key));
+        } catch (UnsupportedEncodingException e) {
+            throw new Exception("验签加密失败!");
+        }
+        return actualSignature;
+    }
+
+    private static byte[] encodeHmacMD5(byte[] data, Key key) {
+        Mac mac = null;
+        try {
+            mac = Mac.getInstance("HmacMD5");
+            mac.init(key);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            e.printStackTrace();
+            return new byte[0];
+        }
+        return mac.doFinal(data);
+    }
+
+```
 >
 *postman 交易API测试*
 > Params
@@ -1160,7 +1280,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
        {
             "date" : 1567582150426 ,
             "data": [
-                {
+                {   
+                    "id": 1,
                     "amount": "5000.000000", //  交易数量
                     "price": "0.400000", //  交易价格
                     "type": 2, //  交易类型，1(买)/2(卖)
@@ -1275,6 +1396,23 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
         bufferedReader.lines().forEach(e -> System.out.print(e));
     }
 ```
+> ###### 所有交易对市场详情-symbol
+```java
+    /**
+     * 获取所有交易对详情
+     * @throws Exception
+     */
+    public void allSymbol() throws Exception {
+        String connUrl = PUB_MARKET_allSymbol;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
+ ```
+
 > ###### 市场详情-symbol
 ```java
     public void symbol() throws Exception {
@@ -1377,6 +1515,26 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
         params.put("sign", sign);
         String paramsStr = SignUtil.convertStr(params);
         String connUrl = PRI_DEAL_getOrder + "?"+ paramsStr;
+        URL url = new URL(connUrl);
+        URLConnection urlConnection = url.openConnection();
+        urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
+        InputStream inputStream = urlConnection.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        bufferedReader.lines().forEach(e -> System.out.print(e));
+    }
+```
+> ###### 外部订单标识获取委托买单或卖单-getOrderByOuter
+```java
+    public void getOrderByOuter() throws Exception{
+        Map<String, String> params = new HashMap<>();
+        params.put("accesskey", ACCESS_KEY);
+        params.put("method", "getOrders");
+        params.put("reqTime", System.currentTimeMillis()+"");
+        params.put("outerId", "outer_1");
+        String sign = SignUtil.sign(params, SECRET_KEY);
+        params.put("sign", sign);
+        String paramsStr = SignUtil.convertStr(params);
+        String connUrl = PRI_DEAL_getOrderByOuter + "?"+ paramsStr;
         URL url = new URL(connUrl);
         URLConnection urlConnection = url.openConnection();
         urlConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36");
