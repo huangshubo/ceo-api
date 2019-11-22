@@ -561,7 +561,8 @@ WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工�
 > |amount|	float	|Y	|交易数量|
 > |tradeType|	int	|Y	|交易类型1/2[买/卖]|
 > |currency	|string|	Y|	市场名字|
-> |outerId	|string|N|	外部订单标识(非必填可不传)|
+> |outerId	|string|  N  |	外部订单标识(非必填可不传) |
+>
 > api/deal/order?accesskey=519b3346-7198-47e3-81b8-20ce13513835&method=order&
 > sign=f7169edac202a776b87811661817aeeb&reqTime=1535102429&price=60000&amount=0.113&tradeType=1&currency=btc_qc
 >
